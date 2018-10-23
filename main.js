@@ -37,7 +37,6 @@ function readSerialData(data) {
     });
     console.log(data);
   }
-//  console.log( data.toString() );
 }
 
 function showPortClose() {
