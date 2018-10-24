@@ -1,7 +1,8 @@
 module.exports = (io) => {
 
   const SerialPort = require('serialport');
-  const serial_cfg = require('../config/serial'); 
+  const serial_cfg = require('../config/serial');
+  const Readline = SerialPort.parsers.Readline;
 
   var port = new SerialPort(serial_cfg.port, {
     baudRate: serial_cfg.baudRate,
@@ -10,6 +11,8 @@ module.exports = (io) => {
     stopBits: 1,
     flowControl: false,
   });
+
+  const parser = port.pipe(new Readline({delimiter: '\r\n'}));
 /*
   port.write("\r\n", function(err) {
     if (err) {
@@ -20,7 +23,7 @@ module.exports = (io) => {
 */
 
   port.on('open', showPortOpen);
-  port.on('data', readSerialData);
+  parser.on('data', readSerialData);
   port.on('close', showPortClose);
   port.on('error', showError);
 
@@ -28,22 +31,23 @@ module.exports = (io) => {
     console.log('Serial port open. Data rate: ' + port.baudRate);
   }
 
-  let CharArray = '';
+  let DataArray = '';
 
   function readSerialData(data) {
-    
-    CharArray += data.toString();
-    if (CharArray.indexOf("\r\n") >= 0) {
+    //console.log(data);
 
-      io.on('connection', socket => {
-        socket.emit('connected');
-        socket.emit('data', CharArray);
-      });
+    var today = new Date();
+    io.sockets.emit('temp',
+                      {date: today.getDate()+"-"+today.getMonth()+1+"-"+today.getFullYear(),
+                       time: (today.getHours())+":"+(today.getMinutes()),
+                       DataArray: data});
+/*
+    io.on('connection', socket => {
+      socket.emit('connected');
+      socket.emit('data', DataArray);
+    });  
+*/
 
-      console.log(CharArray);
-      CharArray = '';
-    }
-  
   }
 
   function showPortClose() {
