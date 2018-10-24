@@ -1,26 +1,25 @@
 {
-  "name": "koa_serial_port",
+  "name": "node_serial_port",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "* Прием и отправка данных через serial port",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.16.4",
-    "serialport": "^7.0.2",
-    "socket.io": "^2.1.1"
-  },
-  "devDependencies": {},
-  "description": "* Прием и отправка данных через serial port",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bob-01/node_serial_port.git"
   },
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/bob-01/node_serial_port/issues"
   },
-  "homepage": "https://github.com/bob-01/node_serial_port#readme"
+  "homepage": "https://github.com/bob-01/node_serial_port#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "serialport": "^7.0.2",
+    "socket.io": "^2.1.1"
+  }
 }

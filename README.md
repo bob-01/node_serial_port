@@ -1,5 +1,9 @@
 * Прием и отправка данных через serial port
 
+install node.js
+
+https://nodejs.org/en/
+
 npm init
 npm install nodemon
 npm install serialport

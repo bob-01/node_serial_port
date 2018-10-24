@@ -1,22 +1,23 @@
-module.exports = (socketServer) => {
+module.exports = (io) => {
 
-  var SerialPort = require('serialport');
-  var graph = require('./graph');
-  
-  var port = new SerialPort('COM4', {
-    baudRate: 9600,
+  const SerialPort = require('serialport');
+  const serial_cfg = require('../config/serial'); 
+
+  var port = new SerialPort(serial_cfg.port, {
+    baudRate: serial_cfg.baudRate,
     dataBits: 8,
     parity: 'none',
     stopBits: 1,
     flowControl: false,
   });
-
+/*
   port.write("\r\n", function(err) {
     if (err) {
       return console.log('Error on write: ', err.message);
     }
     //console.log('message written');
   });
+*/
 
   port.on('open', showPortOpen);
   port.on('data', readSerialData);
@@ -24,20 +25,22 @@ module.exports = (socketServer) => {
   port.on('error', showError);
 
   function showPortOpen() {
-    console.log('Port open. Data rate: ' + port.baudRate);
+    console.log('Serial port open. Data rate: ' + port.baudRate);
   }
 
   let CharArray = '';
 
   function readSerialData(data) {
     
-    graph(port);
     CharArray += data.toString();
     if (CharArray.indexOf("\r\n") >= 0) {
-      
+
+      io.on('connection', socket => {
+        socket.emit('connected');
+        socket.emit('data', CharArray);
+      });
+
       console.log(CharArray);
-      //transmit the sendData array
-      socketServer.emit('connection', {data : CharArray});
       CharArray = '';
     }
   
