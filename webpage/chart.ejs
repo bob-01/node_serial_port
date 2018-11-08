@@ -1,0 +1,59 @@
+<% include header.ejs %>
+<div class="container mt-1">
+
+  <canvas id="myChart" width="1024" height="600"></canvas>
+  <script src="/chart/dist/Chart.js"></script>
+  <script>
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+          datasets: [
+            {
+              label: 'Заявки с истекающими доступами',
+              yAxisID: 'A',
+              data: [<%= typeof(value) !== "undefined" ? value : 0 %>],
+              fill: false,
+              borderColor: ['#0066cc'],
+              borderWidth: 1
+            },
+            {
+              label: 'Истекающие доступы с конфигов',
+              yAxisID: 'A',
+              fill: false,
+              borderColor: ['Red'],
+              borderWidth: 1,
+              data: [<%= typeof(tillAsa) !== "undefined" ? tillAsa : 0 %>]
+            }
+          ]
+      },
+      options: {
+        legend: {
+          position: "bottom",
+          labels: {
+            fontColor: '#343a40',
+            fontSize: 16,
+            padding: 20,
+          }
+        },
+        scales: {
+          yAxes: [{
+            id: 'A',
+            type: 'linear',
+            position: 'left',
+            ticks: {
+                beginAtZero: true
+            }
+          }]
+        }
+    
+      }
+    });
+
+    </script>
+    
+
+</div>
+</body>
+</html>
